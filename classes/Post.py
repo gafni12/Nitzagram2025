@@ -1,6 +1,7 @@
 import pygame
 
 from constants import *
+from .Comment import Comment
 from helpers import screen
 
 
@@ -14,6 +15,16 @@ class Post:
         self.description = description
         self.likes_counter = 0
         self.comments = []
+        self.comments_display_index = 0
+
+    def reset_comments_display_index(self):
+        self.comments_display_index = 0
+
+    def view_more_comments(self):
+        if self.comments_display_index >= len(self.comments) - 1:
+            self.reset_comments_display_index()
+        else:
+            self.comments_display_index += 1
 
     def add_like(self):
         self.likes_counter += 1
@@ -35,13 +46,30 @@ class Post:
         self.display_comments()
 
     def display_content(self):
+        # leave it like that here
         pass
 
     def display_header(self):
-        pass
+        # display username, location and description
+        font = pygame.font.SysFont('chalkduster.ttf', UI_FONT_SIZE)
+
+        username_text = font.render(self.username, True, BLACK)
+        screen.blit(username_text,[USER_NAME_X_POS, USER_NAME_Y_POS])
+
+        location_text = font.render(self.location, True, BLACK)
+        screen.blit(location_text,[LOCATION_TEXT_X_POS, LOCATION_TEXT_Y_POS])
+
+
+        description_text = font.render(self.description, True, BLACK)
+        screen.blit(description_text,[DESCRIPTION_TEXT_X_POS, DESCRIPTION_TEXT_Y_POS])
 
     def display_likes(self):
-        pass
+        # display likes "Liked by X users"
+        font = pygame.font.SysFont('chalkduster.ttf', UI_FONT_SIZE)
+        text = font.render(f"Liked by {self.likes_counter} users", True, (255, 0, 0))
+        screen.blit(text, [LIKE_TEXT_X_POS, LIKE_TEXT_Y_POS])
+
+
 
     def display_comments(self):
         """
@@ -53,8 +81,7 @@ class Post:
         position_index = self.comments_display_index
         # If there are more than 4 comments, print "view more comments"
         if len(self.comments) > NUM_OF_COMMENTS_TO_DISPLAY:
-            comment_font = pygame.font.SysFont('chalkduster.ttf',
-                                               COMMENT_TEXT_SIZE)
+            comment_font = pygame.font.SysFont('chalkduster.ttf',UI_FONT_SIZE)
             view_more_comments_button = comment_font.render("view more comments",
                                                             True, LIGHT_GRAY)
             screen.blit(view_more_comments_button, (VIEW_MORE_COMMENTS_X_POS,

@@ -2,10 +2,10 @@ import pygame
 
 from constants import *
 from helpers import *
-from Post import Post
+from .Post import Post
 
 class TextPost(Post):
-    def __int__(self,username, location, description, text, text_color, background_color):
+    def __init__(self,username, location, description, text, text_color, background_color):
         super().__init__(username, location, description)
         self.background_color = background_color
         self.text_color = text_color
@@ -19,3 +19,4 @@ class TextPost(Post):
             text = font.render(self.text_array[i], True, self.text_color)
             text_pos = center_text(len(self.text_array),text, i)
             screen.blit(text, text_pos)
+
